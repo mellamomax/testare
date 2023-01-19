@@ -4,7 +4,7 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 app.use(express.json())
 
-app.post('/', (req, res) => {
+app.get('/', (req, res) => {
   // Handle the post request here
   console.log(req.body)
   res.send('Hello World')
