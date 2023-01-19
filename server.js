@@ -72,6 +72,7 @@ async function sendNotification(value1, value2) {
   );
 }
 
+
 (async () => {
   const { tableData, value2 } = await getTableValues();
   const tableOutput = table(tableData, {
@@ -80,3 +81,20 @@ async function sendNotification(value1, value2) {
   });
   await sendNotification(tableOutput, value2);
 })();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.post("/", async (req, res) => {
+  const { tableData, value2 } = await getTableValues();
+  const tableOutput = table(tableData, {
+    hsep: " | ",
+    stringLength: (str) => str.length,
+  });
+  await sendNotification(tableOutput, value2);
+  res.send("Script executed successfully!");
+});
+
+app.listen(3000, () => {
+  console.log("Server started on port 3000");
+});
