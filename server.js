@@ -1,3 +1,5 @@
+console.log("script started")
+
 const table = require("text-table");
 const puppeteer = require("puppeteer");
 const axios = require("axios");
@@ -13,6 +15,7 @@ const headers = [
 ];
 
 async function getTableValues() {
+    console.log('Getting table values...')
   const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
   const page = await browser.newPage();
   await page.goto("https://rpilocator.com/?cat=PI4");
@@ -57,6 +60,7 @@ async function getTableValues() {
   const value2 = links ? links[1] : "";
 
   console.log(table(transposedData));
+  console.log('Table values obtained...')
 
   await browser.close();
 
@@ -64,10 +68,13 @@ async function getTableValues() {
 }
 
 async function sendNotification(value1, value2) {
+  console.log('Sending notification...')
   await axios.post(
     "https://maker.ifttt.com/trigger/send_notification/with/key/d_S45YgOUQspXBsB7VymKs",
     { value1, value2 }
   );
+  console.log('Notification sent...')
+
 }
 
 (async () => {
@@ -77,4 +84,7 @@ async function sendNotification(value1, value2) {
     stringLength: (str) => str.length,
   });
   await sendNotification(tableOutput, value2);
+  console.log('Execution completed...')
 })();
+
+console.log("script ended")
