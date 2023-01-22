@@ -1,2 +1,2 @@
-[[functions]]
-  source = "index.js"
+[build]
+  functions = "./functions"
