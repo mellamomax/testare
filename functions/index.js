@@ -1,4 +1,3 @@
-// Docs on event and context https://docs.netlify.com/functions/build/#code-your-function-2
 const handler = async (event) => {
   try {
     if (event.httpMethod === 'POST') {
@@ -8,13 +7,21 @@ const handler = async (event) => {
         statusCode: 200,
         body: JSON.stringify({ message: `Hello ${subject} from post request` }),
       }
-    }
-    const subject = event.queryStringParameters.name || 'World'
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ message: `Hello ${subject} from get request` }),
+    } else if (event.httpMethod === 'GET') {
+      const subject = event.queryStringParameters.name || 'World'
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ message: `Hello ${subject} from get request` }),
+      }
+    } else {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: 'Invalid request method' }),
+      }
     }
   } catch (error) {
     return { statusCode: 500, body: error.toString() }
   }
 }
+
+exports.handler = handler
