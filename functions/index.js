@@ -1,12 +1,20 @@
+const { exec } = require('child_process');
+
 const handler = async (event) => {
   try {
     if (event.httpMethod === 'POST') {
-      const data = JSON.parse(event.body)
-      const subject = data.name || 'World'
+      exec('node server.js', (error, stdout, stderr) => {
+        if (error) {
+          console.error(`exec error: ${error}`);
+          return { statusCode: 500, body: error.toString() }
+        }
+        console.log(`stdout: ${stdout}`);
+        console.log(`stderr: ${stderr}`);
+      });
       return {
         statusCode: 200,
-        body: JSON.stringify({ message: `Hello ${subject} from post request` }),
-      }
+        body: JSON.stringify({ message: "Server script is running" }),
+      };
     } else if (event.httpMethod === 'GET') {
       const subject = event.queryStringParameters.name || 'World'
       return {
