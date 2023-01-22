@@ -1,4 +1,4 @@
-const { exec } = require('child_process');
+const { spawnSync } = require('child_process');
 
 const handler = async (event) => {
   try {
