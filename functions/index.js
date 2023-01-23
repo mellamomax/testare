@@ -1,4 +1,19 @@
 const { spawnSync } = require('child_process');
+const axios = require('axios');
+const express = require('express');
+const app = express();
+app.use(express.json());
+
+app.post('/', (req, res) => {
+  // Use axios to make a POST request to the IFTTT webhook
+  axios.post('https://maker.ifttt.com/trigger/send_notification/with/key/d_S45YgOUQspXBsB7VymKs', req.body)
+    .then(response => {
+      res.send(response.data)
+    })
+    .catch(error => {
+      res.send(error)
+    })
+});
 
 const handler = async (event) => {
   try {
@@ -35,4 +50,8 @@ const handler = async (event) => {
   }
 }
 
-exports.handler = handler
+exports.handler = handler;
+
+app.listen(3000, () => {
+  console.log('Server started on port 3000');
+});
