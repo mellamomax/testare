@@ -19,3 +19,4 @@ const handler = async (event) => {
     }
   }
 }
+exports.handler = handler;
