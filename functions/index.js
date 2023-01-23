@@ -15,6 +15,9 @@ app.post('/', (req, res) => {
     })
 })
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000')
-})
+exports.handler = function(event, context, callback) {
+  callback(null, {
+    statusCode: 200,
+    body: "Hello, World"
+  });
+}
