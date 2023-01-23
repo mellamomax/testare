@@ -1,13 +1,13 @@
 const puppeteer = require("puppeteer");
 
 exports.handler = async (event, context) => {
-  const url = "https://rpilocator.com/?cat=PI4";
-  let table;
+  const url = "https://www.scrapethissite.com/pages/";
+  let div;
   try {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.goto(url);
-    table = await page.$eval("#myTable", (el) => el.outerHTML);
+    div = await page.$eval(".col-md-6.col-md-offset-3", (el) => el.outerHTML);
     await browser.close();
   } catch (error) {
     return {
@@ -17,6 +17,6 @@ exports.handler = async (event, context) => {
   }
   return {
     statusCode: 200,
-    body: JSON.stringify({ table }),
+    body: JSON.stringify({ div }),
   };
 };
