@@ -1,42 +1,33 @@
 const puppeteer = require("puppeteer");
 
 exports.handler = async (event, context) => {
-    console.log("Event:", event);
-    console.log("Context:", context);
     if(event.httpMethod === "POST"){
         let body;
-     try {
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        await page.goto(url);
-        div = await page.$eval(".col-md-6.col-md-offset-3", (el) => el.outerHTML);
-        await browser.close();
-    } catch (error) {
-        console.log(error)
-        return {
-            statusCode: 400,
-            body: JSON.stringify({ error }),
-        };
-    }
+        try {
+            body = JSON.parse(event.body);
+        } catch (err) {
+            return {
+                statusCode: 400,
+                body: JSON.stringify({ error: "Invalid JSON in request body" }),
+            };
+        }
         if (!body.url) {
-            console.error("Missing url property in request body");
             return {
                 statusCode: 400,
                 body: JSON.stringify({ error: "Missing url property in request body" }),
             };
         }
         const url = body.url;
-        let div;
+        let title;
         try {
-            console.log("Scraping URL:", url);
             const browser = await puppeteer.launch();
             const page = await browser.newPage();
             await page.goto(url);
-            div = await page.$eval(".col-md-6.col-md-offset-3", (el) => el.outerHTML);
-            console.log("Scraped HTML:", div);
+            title = await page.$eval("title", (el) => el.textContent);
+            console.log(`Title: ${title}`);
             await browser.close();
         } catch (error) {
-            console.error("Error scraping website:", error);
+            console.log(error);
             return {
                 statusCode: 400,
                 body: JSON.stringify({ error }),
@@ -44,10 +35,9 @@ exports.handler = async (event, context) => {
         }
         return {
             statusCode: 200,
-            body: JSON.stringify({ div }),
+            body: JSON.stringify({ title }),
         };
     }else{
-        console.error("Bad request, only POST method is accepted.");
         return {
             statusCode: 400,
             body: JSON.stringify({ message: "Bad request, only POST method is accepted." }),
