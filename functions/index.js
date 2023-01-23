@@ -1,20 +1,21 @@
 const handler = async (event) => {
   const axios = require('axios');
-
-const postToIFTTTWebhook = async (body) => {
   try {
-    const response = await axios.post('https://maker.ifttt.com/trigger/send_notification/with/key/d_S45YgOUQspXBsB7VymKs', body);
-    console.log(response.data);
+    const postToIFTTTWebhook = async (body) => {
+       await axios.post('https://maker.ifttt.com/trigger/send_notification/with/key/d_S45YgOUQspXBsB7VymKs', body);
+    }
+    const data = {
+      value1: "example_data"
+    }
+    await postToIFTTTWebhook(data);
+    return {
+        statusCode: 200,
+        body: JSON.stringify({ message: "Successfully sent data to IFTTT webhook" })
+    }
   } catch (error) {
-    console.error(error);
+    return {
+        statusCode: 500,
+        body: JSON.stringify({ error: error.toString() })
+    }
   }
 }
-
-const data = {
-  value1: "example_data"
-}
-
-postToIFTTTWebhook(data);
-}
-
-exports.handler = handler;
