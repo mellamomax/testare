@@ -7,7 +7,7 @@ exports.handler = async (event, context) => {
     request(url, (error, response, html) => {
       if (!error && response.statusCode == 200) {
         const $ = cheerio.load(html);
-        const table = $(".mytable").html();
+        const table = $(".myTable").html();
         resolve({
           statusCode: 200,
           body: JSON.stringify({ table }),
