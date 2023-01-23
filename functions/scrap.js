@@ -5,16 +5,19 @@ exports.handler = async (event, context) => {
     console.log("Context:", context);
     if(event.httpMethod === "POST"){
         let body;
-        try {
-            body = JSON.parse(event.body);
-            console.log("Parsed Body:", body);
-        } catch (err) {
-            console.error("Error parsing JSON:", err);
-            return {
-                statusCode: 400,
-                body: JSON.stringify({ error: "Invalid JSON in request body" }),
-            };
-        }
+     try {
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+        await page.goto(url);
+        div = await page.$eval(".col-md-6.col-md-offset-3", (el) => el.outerHTML);
+        await browser.close();
+    } catch (error) {
+        console.log(error)
+        return {
+            statusCode: 400,
+            body: JSON.stringify({ error }),
+        };
+    }
         if (!body.url) {
             console.error("Missing url property in request body");
             return {
