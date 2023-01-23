@@ -2,7 +2,8 @@ const puppeteer = require("puppeteer");
 
 exports.handler = async (event, context) => {
     if(event.httpMethod === "POST"){
-        const url = event.body.url;
+        const body = JSON.parse(event.body);
+        const url = body.url;
         let div;
         try {
             const browser = await puppeteer.launch();
