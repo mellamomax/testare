@@ -1,4 +1,5 @@
-const axios = require('axios');
+const handler = async (event) => {
+  const axios = require('axios');
 
 const postToIFTTTWebhook = async (body) => {
   try {
@@ -14,3 +15,6 @@ const data = {
 }
 
 postToIFTTTWebhook(data);
+}
+
+exports.handler = handler;
