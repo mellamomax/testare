@@ -1,5 +1,5 @@
 const handler = async (event) => {
-const puppeteer = require('puppeteer-lambda');
+const puppeteer = require("puppeteer");
 try {
 const getTableValues = async () => {
 const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
