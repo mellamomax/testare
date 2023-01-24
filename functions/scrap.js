@@ -4,7 +4,7 @@ const cheerio = require('cheerio');
 
 const app = express();
 
-app.post('functions/scrap', (req, res) => {
+app.post('/scrap', (req, res) => {
   const url = req.body.url;
   request(url, (error, response, html) => {
     if (!error && response.statusCode == 200) {
