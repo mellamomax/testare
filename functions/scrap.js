@@ -22,3 +22,7 @@ app.post('/scrape', (req, res) => {
 app.listen(3000, () => {
   console.log('Server started on port 3000');
 });
+const bodyParser = require('body-parser');
+
+// parse application/json
+app.use(bodyParser.json());
