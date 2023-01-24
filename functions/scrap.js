@@ -26,3 +26,4 @@ const bodyParser = require('body-parser');
 
 // parse application/json
 app.use(bodyParser.json());
+exports.handler = app;
