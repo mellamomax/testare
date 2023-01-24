@@ -4,8 +4,9 @@ const cheerio = require('cheerio');
 
 const app = express();
 
-app.get('/scrape', (req, res) => {
-  request('https://www.scrapethissite.com/pages/simple/', (error, response, html) => {
+app.post('/scrape', (req, res) => {
+  const url = req.body.url;
+  request(url, (error, response, html) => {
     if (!error && response.statusCode == 200) {
       const $ = cheerio.load(html);
 
@@ -16,6 +17,7 @@ app.get('/scrape', (req, res) => {
     }
   });
 });
+
 
 app.listen(3000, () => {
   console.log('Server started on port 3000');
