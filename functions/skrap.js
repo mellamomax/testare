@@ -14,7 +14,7 @@ const headers = [
 
 const handler = async (event) => {
 try {
-const browser = await puppeteer.launch();
+const browser = await puppeteerCore.launch();
 const page = await browser.newPage();
 await page.goto("https://rpilocator.com/?cat=PI3");
 const tableData = await page.evaluate(() => {
