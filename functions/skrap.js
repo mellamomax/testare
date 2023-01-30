@@ -1,5 +1,5 @@
 const axios = require("axios");
-const puppeteer = require("puppeteer");
+const puppeteerCore = require('puppeteer-core');
 const Table = require("cli-table");
 
 const headers = [
