@@ -20,11 +20,10 @@ const handler = async (event) => {
       .toArray()
       .filter((row) => {
         return (
-          $(row).attr("class") &&
-          ($(row).attr("class").split(" ").length !== 1 ||
-            !["odd", "even"].includes($(row).attr("class").split(" ")[0]))
-        );
-      });
+  $(row).attr("class") &&
+  ($(row).attr("class").split(" ").length !== 1 ||
+    ["odd", "even"].every((className) => !$(row).attr("class").includes(className)))
+);
     const tableData = rows.map((row) => {
       const cells = $(row).find("td").toArray();
       return cells.map((cell) =>
