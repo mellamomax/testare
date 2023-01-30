@@ -1,3 +1,7 @@
+const axios = require("axios");
+const cheerio = require("cheerio");
+const table = require("table");
+
 const headers = [
 "Description",
 "Link",
@@ -8,78 +12,46 @@ const headers = [
 "Price",
 ];
 
-const handler = async (event) => {
-const puppeteer = require("puppeteer");
-
 async function getTableValues() {
-const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
-const page = await browser.newPage();
-await page.goto("https://rpilocator.com/?cat=PI4");
-await page.waitForSelector("#myTable");
-
-const data = await page.evaluate(() => {
-  const rows = Array.from(
-    document.querySelectorAll("#myTable tr")
-  ).filter(
-    (row) =>
-      row.classList.length !== 1 ||
-      !["odd", "even"].includes(row.classList[0])
-  );
-  return rows.map((row) => {
-    const cells = Array.from(row.querySelectorAll("td"));
-    return cells.map((cell) =>
-      cell.classList.contains("text-center")
-        ? cell.querySelector("a")
-          ? cell.querySelector("a").getAttribute("href")
-          : ""
-        : cell.textContent
-    );
-  });
+const { data } = await axios.get("https://rpilocator.com/?cat=PI4");
+const $ = cheerio.load(data);
+const rows = $("#myTable tr").toArray().filter((row) => {
+return (
+$(row).attr("class").split(" ").length !== 1 ||
+!["odd", "even"].includes($(row).attr("class").split(" ")[0])
+);
 });
-
+const tableData = rows.map((row) => {
+const cells = $(row)
+.find("td")
+.toArray();
+return cells.map((cell) =>
+$(cell).hasClass("text-center")
+? $(cell)
+.find("a")
+.attr("href") || ""
+: $(cell).text()
+);
+});
 const transposedData = [...headers].map((header, i) => [
-  header,
-  ...data.map((row) => row[i + 1]),
+header,
+...tableData.map((row) => row[i]),
 ]);
-
 // Exclude the "Link", "Update Status", "In Stock", and "Last Stock" columns from the table output
-const tableData = transposedData
-  .filter(
-    (row) =>
-      row[0] !== "Link" &&
-      row[0] !== "Update Status" &&
-      row[0] !== "In Stock" &&
-      row[0] !== "Last Stock"
-  )
-  .map((row) => row.slice(1));
-
+const filteredTableData = transposedData
+.filter(
+(row) =>
+row[0] !== "Link" &&
+row[0] !== "Update Status" &&
+row[0] !== "In Stock" &&
+row[0] !== "Last Stock"
+)
+.map((row) => row.slice(1));
 // Assign the "Link" column to value2
 const links = transposedData.find((row) => row[0] === "Link");
 const value2 = links ? links[1] : "";
-
-console.log(table(transposedData));
-
-await browser.close();
-
-return { tableData, value2 };
+console.log(table.table(transposedData));
+return { tableData: filteredTableData, value2 };
 }
 
-try {
-const { tableData, value2 } = await getTableValues();
-
-return {
-  statusCode: 200,
-  body: JSON.stringify({
-    message: "Successfully retrieved table values",
-    tableData: tableData.slice(0, 3),
-    value2,
-  }),
-};
-} catch (error) {
-return {
-statusCode: 500,
-body: JSON.stringify({ error: error.toString() }),
-};
-}
-};
-exports.handler = handler;
+getTableValues().then(console.log).catch(console.error);
