@@ -53,7 +53,8 @@ const value2 = links ? links[1] : "";
 
 const table = [headers, ...filteredTableData];
  
-return { statusCode: 200, body: JSON.stringify({ message: table.toString(), value2 }) }
+return { statusCode: 200, body: JSON.stringify({ message: headers.join('\n'), value2 }) }
+
 
 } catch (error) {
 return {
