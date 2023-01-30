@@ -13,12 +13,13 @@ app.post('/scrap', (req, res) => {
       const $ = cheerio.load(html);
       const title = $('h1').text();
       const description = $('p').text();
-      res.json({ title, description });
+      res.status(200).json({ title, description });
     } else {
       res.status(500).json({ error: 'Failed to scrape website' });
     }
   });
 });
+
 
 exports.handler = (event, context, callback) => {
   app(event, context, callback);
