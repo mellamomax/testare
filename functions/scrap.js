@@ -53,10 +53,9 @@ const handler = async (event) => {
       colWidths: [20, 30, 15, 20, 10, 15, 10],
     });
 
-    filteredTableData.forEach((row) => {
-      table.push(row);
-    });
-
+transposedData.forEach((row) => {
+  table.push(row);
+});
     return {
       statusCode: 200,
       headers: {
