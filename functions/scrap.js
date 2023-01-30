@@ -1,6 +1,6 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
-const table = require('text-table');
+const Table = require('cli-table');
 
 const headers = [
 "Description",
