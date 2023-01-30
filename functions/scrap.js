@@ -14,7 +14,7 @@ const headers = [
 
 const handler = async (event) => {
   try {
-    const response = await axios.get("https://rpilocator.com/?cat=PI4");
+    const response = await axios.get("https://rpilocator.com/?cat=PI3");
     const $ = cheerio.load(response.data);
     const rows = $("#myTable tr")
       .toArray()
