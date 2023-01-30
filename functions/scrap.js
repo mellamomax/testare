@@ -14,8 +14,10 @@ app.post('/scrap', (req, res) => {
       const title = $('h1').text();
       const description = $('p').text();
       res.json({ title, description });
+    } else {
+      res.status(500).json({ error: 'Failed to scrape website' });
     }
   });
 });
 
-exports.handler = app;
+module.exports = app;
