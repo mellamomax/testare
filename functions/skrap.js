@@ -14,8 +14,8 @@ const headers = [
 
 const handler = async (event) => {
 try {
-const browser = await puppeteerCore.launch();
-  executablePath: 'C:\Program Files\Google\Chrome\Application\chrome.exe'
+const browser = await puppeteerCore.launch({
+executablePath: 'C:\Program Files\Google\Chrome\Application\chrome.exe'
 });
 const page = await browser.newPage();
 await page.goto("https://rpilocator.com/?cat=PI3");
@@ -61,11 +61,11 @@ const table = [headers, ...filteredTableData];
 await browser.close();
 
 return {
-  statusCode: 200,
-  headers: {
-    "Content-Type": "text/plain; charset=utf-8",
-  },
-  body: headers.join("\n"),
+statusCode: 200,
+headers: {
+"Content-Type": "text/plain; charset=utf-8",
+},
+body: headers.join("\n"),
 };
 } catch (error) {
 return {
