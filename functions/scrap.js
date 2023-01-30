@@ -1,6 +1,6 @@
-const axios = require("axios");
-const cheerio = require("cheerio");
-const table = require("text-table");
+const axios = require('axios');
+const cheerio = require('cheerio');
+const table = require('text-table');
 
 const headers = [
 "Description",
@@ -12,9 +12,10 @@ const headers = [
 "Price",
 ];
 
-async function getTableValues() {
-const { data } = await axios.get("https://rpilocator.com/?cat=PI4");
-const $ = cheerio.load(data);
+const handler = async (event) => {
+try {
+const response = await axios.get('https://rpilocator.com/?cat=PI4');
+const $ = cheerio.load(response.data);
 const rows = $("#myTable tr").toArray().filter((row) => {
 return (
 $(row).attr("class").split(" ").length !== 1 ||
@@ -50,8 +51,18 @@ row[0] !== "Last Stock"
 // Assign the "Link" column to value2
 const links = transposedData.find((row) => row[0] === "Link");
 const value2 = links ? links[1] : "";
-console.log(table.table(transposedData));
-return { tableData: filteredTableData, value2 };
-}
 
-getTableValues().then(console.log).catch(console.error);
+
+return {
+  statusCode: 200,
+  body: JSON.stringify({ message: table.table(filteredTableData), value2 })
+}
+} catch (error) {
+return {
+statusCode: 500,
+body: JSON.stringify({ error: error.toString() })
+}
+}
+};
+
+exports.handler = handler;
