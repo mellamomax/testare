@@ -20,4 +20,6 @@ app.post('/scrap', (req, res) => {
   });
 });
 
-module.exports = app;
+exports.handler = (event, context, callback) => {
+  app(event, context, callback);
+};
