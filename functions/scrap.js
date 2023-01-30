@@ -33,10 +33,10 @@ const handler = async (event) => {
           : $(cell).text()
       );
     });
-    const transposedData = [...headers].map((header, i) => [
-      header,
-      ...tableData.map((row) => row[i]),
-    ]);
+  const transposedData = [...headers].map((header, i) => [
+    header,
+    ...tableData.map((row) => row[i + 1]),
+  ]);
     // Exclude the "Link", "Update Status", "In Stock", and "Last Stock" columns from the table output
     const filteredTableData = transposedData
       .filter(
