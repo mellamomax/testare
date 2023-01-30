@@ -52,13 +52,14 @@ const links = transposedData.find((row) => row[0] === "Link");
 const value2 = links ? links[1] : "";
 
 const table = [headers, ...filteredTableData];
+ const secondRow = filteredTableData[1];
  
 return {
 statusCode: 200,
 headers: {
 'Content-Type': 'text/plain; charset=utf-8',
 },
-body: headers.join('\n') + '\n' + filteredTableData[0].join('\n'),
+body: headers.join('\n') + '\n' + secondRow.join('\n'),
 };
 
 } catch (error) {
