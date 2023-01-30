@@ -33,10 +33,10 @@ const handler = async (event) => {
           : $(cell).text()
       );
     });
-  const transposedData = [...headers].map((header, i) => [
-    header,
-    ...tableData.map((row) => row[i + 1]),
-  ]);
+    const transposedData = [...headers].map((header, i) => [
+      header,
+      ...tableData.map((row) => row[i + 1]),
+    ]);
     // Exclude the "Link", "Update Status", "In Stock", and "Last Stock" columns from the table output
     const filteredTableData = transposedData
       .filter(
@@ -47,21 +47,23 @@ const handler = async (event) => {
           row[0] !== "Last Stock"
       )
       .map((row) => row.slice(1));
-    // Assign the "Link" column to value2
-    const links = transposedData.find((row) => row[0] === "Link");
-    const value2 = links ? links[1] : "";
 
-    const table = [headers, ...filteredTableData];
+    const table = new Table({
+      head: headers,
+      colWidths: [20, 30, 15, 20, 10, 15, 10],
+    });
 
-return {
-statusCode: 200,
-headers: {
-"Content-Type": "text/plain; charset=utf-8",
-},
-body: transposedData
-.map((row) => row.join("\t"))
-.join("\n"),
-};
+    filteredTableData.forEach((row) => {
+      table.push(row);
+    });
+
+    return {
+      statusCode: 200,
+      headers: {
+        "Content-Type": "text/plain; charset=utf-8",
+      },
+      body: table.toString(),
+    };
   } catch (error) {
     return {
       statusCode: 500,
