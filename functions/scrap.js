@@ -16,15 +16,15 @@ const handler = async (event) => {
   try {
     const response = await axios.get("https://rpilocator.com/?cat=PI3");
     const $ = cheerio.load(response.data);
-const rows = $("#myTable tr")
-  .toArray()
-  .filter((row) => {
-    return (
-      $(row).attr("class") &&
-      ($(row).attr("class").split(" ").length !== 1 ||
-        ["odd", "even"].every((className) => !$(row).attr("class").includes(className)))
-    );
-  });
+    const rows = $("#myTable tr")
+      .toArray()
+      .filter((row) => {
+        return (
+          $(row).attr("class") &&
+          ($(row).attr("class").split(" ").length !== 1 ||
+            ["odd", "even"].every((className) => !$(row).attr("class").includes(className)))
+        );
+      });
     const tableData = rows.map((row) => {
       const cells = $(row).find("td").toArray();
       return cells.map((cell) =>
@@ -64,7 +64,7 @@ const rows = $("#myTable tr")
       },
       body: table.toString(),
     };
-  }catch (error) {
+  } catch (error) {
     return {
       statusCode: 500,
       body: JSON.stringify({ error: error.toString() }),
