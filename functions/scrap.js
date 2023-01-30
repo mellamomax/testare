@@ -58,7 +58,7 @@ statusCode: 200,
 headers: {
 'Content-Type': 'text/plain; charset=utf-8',
 },
-body: headers.join('\n'),
+body: headers.join('\n') + '\n' + filteredTableData[0].join('\n'),
 };
 
 } catch (error) {
