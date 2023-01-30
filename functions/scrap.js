@@ -53,13 +53,15 @@ const handler = async (event) => {
 
     const table = [headers, ...filteredTableData];
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Content-Type": "text/plain; charset=utf-8",
-      },
-      body: headers.join("\n"),
-    };
+return {
+statusCode: 200,
+headers: {
+"Content-Type": "text/plain; charset=utf-8",
+},
+body: [headers, ...filteredTableData]
+.map((row) => row.join("\t"))
+.join("\n"),
+};
   } catch (error) {
     return {
       statusCode: 500,
