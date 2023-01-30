@@ -1,9 +1,11 @@
 const axios = require('axios');
+const cheerio = require('cheerio');
 
 const handler = async (event) => {
 try {
 const response = await axios.get('https://www.scrapethissite.com/pages/simple/');
-const h1 = response.data.match(/<h1>(.*?)</h1>/)[1];
+const $ = cheerio.load(response.data);
+const h1 = $('h1').text();
 return {
 statusCode: 200,
 body: JSON.stringify({ message: h1 })
