@@ -52,15 +52,8 @@ const links = transposedData.find((row) => row[0] === "Link");
 const value2 = links ? links[1] : "";
 
 const table = [headers, ...filteredTableData];
- const secondRow = filteredTableData[1];
  
-return {
-statusCode: 200,
-headers: {
-'Content-Type': 'text/plain; charset=utf-8',
-},
-body: headers.join('\n') + '\n' + secondRow.join('\n'),
-};
+return { statusCode: 200, body: JSON.stringify({ message: table.toString(), value2 }) }
 
 } catch (error) {
 return {
