@@ -14,7 +14,7 @@ const headers = [
 
 const handler = async (event) => {
   try {
-    const response = await axios.get("https://rpilocator.com/?cat=PI3");
+    const response = await axios.get("https://rpilocator.com/?cat=PI4");
     const $ = cheerio.load(response.data);
     const rows = $("#myTable tr")
       .toArray()
@@ -22,7 +22,7 @@ const handler = async (event) => {
         return (
           $(row).attr("class") &&
           ($(row).attr("class").split(" ").length !== 1 ||
-            ["odd", "even"].every((className) => !$(row).attr("class").includes(className)))
+            !["odd", "even"].includes($(row).attr("class").split(" ")[0]))
         );
       });
     const tableData = rows.map((row) => {
@@ -35,7 +35,7 @@ const handler = async (event) => {
     });
     const transposedData = [...headers].map((header, i) => [
       header,
-      ...tableData.map((row) => row[i + 1]),
+      ...tableData.map((row) => row[i]),
     ]);
     // Exclude the "Link", "Update Status", "In Stock", and "Last Stock" columns from the table output
     const filteredTableData = transposedData
@@ -47,21 +47,18 @@ const handler = async (event) => {
           row[0] !== "Last Stock"
       )
       .map((row) => row.slice(1));
+    // Assign the "Link" column to value2
+    const links = transposedData.find((row) => row[0] === "Link");
+    const value2 = links ? links[1] : "";
 
-    const table = new Table({
-      head: headers,
-      colWidths: [20, 30, 15, 20, 10, 15, 10],
-    });
+    const table = [headers, ...filteredTableData];
 
-transposedData.forEach((row) => {
-  table.push(row);
-});
     return {
       statusCode: 200,
       headers: {
         "Content-Type": "text/plain; charset=utf-8",
       },
-      body: table.toString(),
+      body: headers.join("\n"),
     };
   } catch (error) {
     return {
