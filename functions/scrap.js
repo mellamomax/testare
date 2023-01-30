@@ -51,7 +51,7 @@ row[0] !== "Last Stock"
 const links = transposedData.find((row) => row[0] === "Link");
 const value2 = links ? links[1] : "";
 
-const table = [headers, ...filteredTableData];
+const table = [filteredTableData.map((row) => [headers, ...row])];
  
 return { statusCode: 200, body: JSON.stringify({ message: table.toString(), value2 }) }
 
