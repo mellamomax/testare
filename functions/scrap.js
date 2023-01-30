@@ -25,14 +25,12 @@ const rows = $("#myTable tr")
   })
   .slice(0, 3);
 
-    const tableData = rows.map((row) => {
-      const cells = $(row).find("td").toArray();
-      return cells.map((cell) =>
-        $(cell).hasClass("text-center")
-          ? $(cell).find("a").attr("href") || ""
-          : $(cell).text()
-      );
-    });
+const tableData = rows.map((row) => {
+  const cells = $(row).find("td").toArray();
+  return cells.slice(0, 3).map((cell) =>
+    $(cell).text()
+  );
+});
     const transposedData = [...headers].map((header, i) => [
       header,
       ...tableData.map((row) => row[i]),
