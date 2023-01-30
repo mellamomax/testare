@@ -16,21 +16,23 @@ const handler = async (event) => {
   try {
     const response = await axios.get("https://rpilocator.com/?cat=PI4");
     const $ = cheerio.load(response.data);
-const rows = $("#myTable tr")
-  .toArray()
-  .filter((row) => {
-    return (
-      $(row).attr("class") === "odd"
-    );
-  })
-  .slice(0, 3);
-
-const tableData = rows.map((row) => {
-  const cells = $(row).find("td").toArray();
-  return cells.slice(0, 3).map((cell) =>
-    $(cell).text()
-  );
-});
+    const rows = $("#myTable tr")
+      .toArray()
+      .filter((row) => {
+        return (
+          $(row).attr("class") &&
+          ($(row).attr("class").split(" ").length !== 1 ||
+            !["odd", "even"].includes($(row).attr("class").split(" ")[0]))
+        );
+      });
+    const tableData = rows.map((row) => {
+      const cells = $(row).find("td").toArray();
+      return cells.map((cell) =>
+        $(cell).hasClass("text-center")
+          ? $(cell).find("a").attr("href") || ""
+          : $(cell).text()
+      );
+    });
     const transposedData = [...headers].map((header, i) => [
       header,
       ...tableData.map((row) => row[i]),
@@ -56,7 +58,7 @@ const tableData = rows.map((row) => {
       headers: {
         "Content-Type": "text/plain; charset=utf-8",
       },
-      body: table.map((row) => row.join("\t")).join("\n"),
+      body: headers.join("\n"),
     };
   } catch (error) {
     return {
