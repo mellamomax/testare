@@ -52,7 +52,9 @@ const links = transposedData.find((row) => row[0] === "Link");
 const value2 = links ? links[1] : "";
 
 
-const table = [headers, ...filteredTableData];
+// Convert the filtered table data into a string with each row separated by a new line
+let table = headers.join("\t");
+table += "\n" + filteredTableData.map((row) => row.join("\t")).join("\n");
   
   
 return { statusCode: 200, body: JSON.stringify({ message: table.toString(), value2 }) }
