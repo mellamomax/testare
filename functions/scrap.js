@@ -52,10 +52,10 @@ const links = transposedData.find((row) => row[0] === "Link");
 const value2 = links ? links[1] : "";
 
 
-return {
-  statusCode: 200,
-  body: JSON.stringify({ message: table.table(filteredTableData), value2 })
-}
+const table = new Table({ head: headers });
+filteredTableData.forEach(row => table.push(row));
+return { statusCode: 200, body: JSON.stringify({ message: table.toString(), value2 }) }
+
 } catch (error) {
 return {
 statusCode: 500,
