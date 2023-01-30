@@ -15,8 +15,7 @@ const headers = [
 const handler = async (event) => {
 try {
 const browser = await puppeteerCore.launch({
-executablePath: 'C:\Program Files\Google\Chrome\Application\chrome.exe'
-});
+  executablePath: '"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"'});
 const page = await browser.newPage();
 await page.goto("https://rpilocator.com/?cat=PI3");
 const tableData = await page.evaluate(() => {
