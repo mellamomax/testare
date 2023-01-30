@@ -1,26 +1,19 @@
-const express = require('express');
-const request = require('request');
-const cheerio = require('cheerio');
-const bodyParser = require('body-parser');
+const axios = require('axios');
 
-const app = express();
-app.use(bodyParser.json());
-
-app.post('/scrap', (req, res) => {
-console.log('Received POST request');
-const url = req.body.url;
-request(url, (error, response, html) => {
-if (!error && response.statusCode == 200) {
-console.log('Website successfully scraped');
-const $ = cheerio.load(html);
-const title = $('h1').text();
-const description = $('p').text();
-res.json({ title, description });
-} else {
-console.error('Failed to scrape website');
-res.status(500).json({ error: 'Failed to scrape website' });
+const handler = async (event) => {
+try {
+const response = await axios.get('https://www.scrapethissite.com/pages/simple/');
+const h1 = response.data.match(/<h1>(.*?)</h1>/)[1];
+return {
+statusCode: 200,
+body: JSON.stringify({ message: h1 })
 }
-});
-});
+} catch (error) {
+return {
+statusCode: 500,
+body: JSON.stringify({ error: error.toString() })
+}
+}
+};
 
-exports.handler = app;
+exports.handler = handler;
