@@ -1,3 +1,4 @@
+exports.handler = async (event, context) => {
 const puppeteer = require("puppeteer");
 
 async function scrape() {
@@ -55,3 +56,4 @@ async function scrape() {
 }
 
 scrape();
+}:
