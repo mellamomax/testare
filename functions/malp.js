@@ -1,7 +1,7 @@
 const chromeAwsLambda = require('chrome-aws-lambda');
 const puppeteer = require('puppeteer-core');
 
-exports.handler = async (event, context) => {
+exports.handler = async (event, context, callback) => {
   let browser = null;
   try {
     browser = await puppeteer.launch({
@@ -53,9 +53,15 @@ exports.handler = async (event, context) => {
       }, "");
     });
 
-    console.log(data[0]);
+    // Return the data in the response object
+    const response = {
+      statusCode: 200,
+      body: JSON.stringify(data),
+    };
+    callback(null, response);
   } catch (error) {
     console.error(error);
+    callback(error);
   } finally {
     if (browser !== null) {
       await browser.close();
