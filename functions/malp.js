@@ -1,19 +1,13 @@
-const fs = require("fs");
-const path = require("path");
-const puppeteer = require("puppeteer");
+const chromeAwsLambda = require('chrome-aws-lambda');
+const puppeteer = require('puppeteer-core');
 
 exports.handler = async (event, context) => {
   let browser = null;
   try {
-    const executablePath = fs.existsSync(
-      "/var/task/node_modules/puppeteer/.local-chromium/linux-608668/chrome-linux/chrome"
-    )
-      ? "/var/task/node_modules/puppeteer/.local-chromium/linux-608668/chrome-linux/chrome"
-      : null;
-
     browser = await puppeteer.launch({
-      executablePath,
-      args: ["--no-sandbox"],
+      args: chromeAwsLambda.args,
+      executablePath: await chromeAwsLambda.executablePath,
+      headless: chromeAwsLambda.headless,
     });
 
     const page = await browser.newPage();
