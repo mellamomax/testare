@@ -10,7 +10,8 @@
     "puppeteer": "^19.6.1",
     "request": "^2.88.2",
         "puppeteer-core": "^19.6.2",
-    "text-table": "^0.2.0"
+    "text-table": "^0.2.0",
+        "chrome-aws-lambda": "^10.1.0"
   },
   "engines": {
     "node": "18.12.1"
