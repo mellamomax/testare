@@ -15,7 +15,6 @@ const headers = [
 const handler = async (event) => {
 try {
 const browser = await puppeteerCore.launch({
-    ignoreDefaultArgs: ['--disable-extensions'],
   executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
 });
 const page = await browser.newPage();
