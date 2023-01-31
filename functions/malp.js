@@ -56,4 +56,3 @@ async function scrape() {
 }
 
 scrape();
-}:
