@@ -9,7 +9,7 @@
     "express": "^4.17.1",
     "puppeteer": "^19.6.1",
     "request": "^2.88.2",
-        "puppeteer-core": "^19.6.2",
+        "puppeteer-core": "^10.1.0",
     "text-table": "^0.2.0",
         "chrome-aws-lambda": "^10.1.0"
   },
