@@ -1,5 +1,15 @@
+const fs = require("fs");
+const path = require("path");
+const puppeteer = require("puppeteer");
+
 exports.handler = async (event, context) => {
-  const puppeteer = require("puppeteer");
+  let browser = null;
+  try {
+    const executablePath = fs.existsSync(
+      "/var/task/node_modules/puppeteer/.local-chromium/linux-608668/chrome-linux/chrome"
+    )
+      ? "/var/task/node_modules/puppeteer/.local-chromium/linux-608668/chrome-linux/chrome"
+      : null;
   
   async function scrape() {
     const browser = await puppeteer.launch({
