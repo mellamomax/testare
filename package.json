@@ -7,7 +7,7 @@
     "cheerio": "^1.0.0-rc.12",
     "cli-table": "^0.3.11",
     "express": "^4.17.1",
-    "puppeteer": "^18.2.0",
+    "puppeteer": "^19.6.1",
     "request": "^2.88.2",
         "puppeteer-core": "^19.6.2",
     "text-table": "^0.2.0"
