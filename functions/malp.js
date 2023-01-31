@@ -10,11 +10,12 @@ exports.handler = async (event, context) => {
     )
       ? "/var/task/node_modules/puppeteer/.local-chromium/linux-608668/chrome-linux/chrome"
       : null;
-  
-  async function scrape() {
-    const browser = await puppeteer.launch({
+
+    browser = await puppeteer.launch({
+      executablePath,
       args: ["--no-sandbox"],
     });
+
     const page = await browser.newPage();
     await page.goto("https://rpilocator.com/?cat=PI3");
 
@@ -31,9 +32,7 @@ exports.handler = async (event, context) => {
 
     const filteredHeaders = headers.filter(
       (header) =>
-        header === "Description" ||
-        header === "Vendor" ||
-        header === "Price"
+        header === "Description" || header === "Vendor" || header === "Price"
     );
 
     const rows = await page.evaluate(() => {
@@ -61,9 +60,11 @@ exports.handler = async (event, context) => {
     });
 
     console.log(data[0]);
-
-    await browser.close();
+  } catch (error) {
+    console.error(error);
+  } finally {
+    if (browser !== null) {
+      await browser.close();
+    }
   }
-  
-  await scrape();
 };
